@@ -8,7 +8,7 @@ Tautan menuju aplikasi : https://erik-wilbert-burhansportswear.pbp.cs.ui.ac.id/
 - Mendefinisikan model Product di models.py dengan enam atribut wajib (name, price, description, thumbnail, category, is_featured) dengan tipe field masing-masing, lalu jalankan "python manage.py makemigrations" dan "python manage.py migrate" untuk melakukan perubahan pada model basis data di Django.
 - Implementasi MVT dasar dengan sebuah views yang merender template main.html (buatkan main.html di dalam folder baru bernama templates di aplikasi main) berisi html sederhana dengan nama aplikasi, nama lengkap, dan kelas, petakan rute main.html di main/urls.py dan gabungkan ke urls.py utama proyek dengan include.
 - Setup PWS dengan buat proyek di PWS, amankan username dan passwordnya, copy isi env.prod ke Environs, dan tambahkan URL PWS proyek ini ke ALLOWED_HOSTS di settings.py, jalankan perintah “Project Command” awal dari PWS.
-- Lakukan "git add .", "git commit -m <komentar>", dan "git push origin <main branch>", serta "git push PWS <main branch>" setiap kali melakukan perubahan.
+- Lakukan "git add .", "git commit -m <komentar>", dan "git push origin <main branch>" serta "git push PWS <main branch>" setiap kali melakukan perubahan.
 
 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html.
 ![Django MVT](./images/bagan_model_mvt.png)
