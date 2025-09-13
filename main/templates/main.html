@@ -13,5 +13,41 @@
     <p>{{ name }}<p>
     <h5>Class: </h5>
     <p>{{ class }}</p>
+
+    <a href="{% url 'main:create_product' %}">
+        <button>+ Add Product</button>
+    </a>
+
+    <hr>
+
+    {% if not product_list %}
+    <p>Belum ada produk.</p>
+    {% else %}
+    
+    {% for product in product_list %}
+    <div>
+        <h2><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h2>
+    
+        <p>
+            <b>{{ product.category|title }}</b>
+            {% if product.is_featured %} | <b>🌟 Featured</b>{% endif %}
+            {% if product.price %} | <b>Price:</b> ${{ product.price }}{% endif %}
+        </p>
+    
+        {% if product.thumbnail %}
+        <img src="{{ product.thumbnail }}" alt="{{ product.name }}" width="150" height="100"
+             style="border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.15);">
+        <br />
+        {% endif %}
+    
+        <p>{{ product.description|truncatewords:25 }}</p>
+    
+        <p><a href="{% url 'main:show_product' product.id %}"><button>Read More</button></a></p>
+    </div>
+    
+    <hr>
+    {% endfor %}
+    
+    {% endif %}
 </body>
 </html>
