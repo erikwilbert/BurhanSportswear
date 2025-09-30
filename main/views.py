@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from main.forms import NewsForm
+from main.forms import ProductForms
 from main.models import Product
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
@@ -31,7 +31,7 @@ def show_main(request):
 
 @login_required(login_url='/login')
 def create_product(request):
-    form = NewsForm(request.POST or None)
+    form = ProductForms(request.POST or None)
 
     if form.is_valid() and request.method == 'POST':
         product_entry = form.save(commit = False)
@@ -112,3 +112,21 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    form = ProductForms(request.POST or None, instance=product)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    context = {
+        'form': form
+    }
+
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    product.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
