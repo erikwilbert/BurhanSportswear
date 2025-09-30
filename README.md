@@ -1,6 +1,6 @@
 Tautan menuju aplikasi : https://erik-wilbert-burhansportswear.pbp.cs.ui.ac.id/
 
-Tugas 2
+### Tugas 2
 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
 - Membuat folder proyek local, aktifkan virtual environment, susun requirements.txt, download seluruh dependence atau library yang terdapat pada requirements.txt.
 - Inisialisasi git dan buat .gitignore untuk file sensitif yang tidak perlu dicommit, buatkan juga repository baru di github lalu menghubungkan git local ke github dengan menggunakan "remote add origin <link menuju repository>".
@@ -28,7 +28,7 @@ Menurut saya, framework Django dijadikan permulaan pembelajaran pengembangan per
 Asisten dosen tutorial 1 cukup membantu walaupun dilaksanakan secara online, asisten dosen membantu melalui platform yang tersedia, asisten dosen mampu membantu menangani error yang membingungkan bagi kita.
 
 
-Tugas 3
+### Tugas 3
 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
 Data delivery diperlukan dalam pengimplementasian sebuah platform karena menjadi mekanisme utama pertukaran informasi antar komponen sistem, seperti antara frontend dan backend. Dengan adanya data delivery, aplikasi dapat menampilkan data secara dinamis, memungkinkan interaksi dua arah dengan server, serta memastikan sistem yang berbeda bisa saling berkomunikasi dengan baik. 
 
@@ -58,7 +58,7 @@ CSRF token dibutuhkan pada form Django untuk mencegah serangan Cross-Site Reques
 Selama tutorial 2 masih aman dan baik.
 
 
-Tugas 4
+### Tugas 4
 1. Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
 Django AuthenticationForm adalah form bawaan yang disediakan oleh Django untuk menangani proses login pengguna dengan menyediakan field username dan password serta melakukan validasi langsung terhadap data yang dimasukkan berdasarkan model User. Kelebihan dari AuthenticationForm adalah sifatnya yang siap pakai tanpa perlu membuat form login dari awal, terintegrasi penuh dengan sistem autentikasi Django melalui fungsi authenticate() dan login(), memiliki validasi otomatis untuk username dan password yang salah, serta fleksibel untuk diperluas jika dibutuhkan field tambahan seperti “remember me”. AuthenticationForm memiliki kekurangan seperti hanya mendukung login berbasis username dan password sehingga tidak cukup fleksibel apabila aplikasi membutuhkan metode autentikasi lain seperti login dengan email, OTP, atau Single Sign-On (SSO), sehingga dalam penggunaannya sering memerlukan subclassing atau overriding agar sesuai dengan kebutuhan tertentu.
 
@@ -80,4 +80,31 @@ Penggunaan cookies dalam pengembangan web tidak sepenuhnya aman secara default k
 - Menghubungkan models User dari bawaan django models dengan Product.
 - Membuat fitur filter pada fungsi show_main di views.py dan tambahkan tombol filter pada main.html.
 - Menambahkan nama penjual pada product_detail.html.
+- Lakukan "git add .", "git commit -m <komentar>", dan "git push origin <main branch>" serta "git push PWS <main branch>" setiap kali melakukan perubahan.
+
+
+### Tugas 5
+1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+Ketika ada beberapa CSS selector yang mengatur elemen yang sama, browser akan menentukan aturan mana yang digunakan berdasarkan prinsip specificity dan cascade. Prioritasnya dimulai dari inline style (paling tinggi), lalu ID selector, kemudian class, pseudo-class, dan attribute selector, setelah itu baru element/tag selector, sedangkan universal selector, inheritance, dan default browser style berada pada prioritas terendah. Jika specificity sama, aturan yang ditulis paling akhir akan dipakai, dan jika ada !important, maka aturan tersebut akan mengalahkan semuanya kecuali ada !important lain dengan tingkat specificity yang lebih tinggi.
+
+2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design, serta jelaskan mengapa!
+Responsive design adalah pendekatan dalam pengembangan web agar tampilan aplikasi menyesuaikan ukuran layar perangkat seperti desktop, tablet, atau smartphone, sehingga pengguna tetap nyaman tanpa harus melakukan zoom atau scroll horizontal. Konsep ini penting karena mayoritas pengguna internet saat ini mengakses melalui perangkat mobile, sehingga web yang tidak responsive akan menurunkan pengalaman pengguna dan ranking SEO. Misalnya, Instagram Web sudah menerapkan responsive design sehingga tampilannya menyesuaikan di layar ponsel maupun laptop, sedangkan beberapa situs lama atau portal berita kuno masih menggunakan ukuran tetap sehingga sulit dibaca di layar kecil.
+
+3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+Dalam CSS box model, margin, border, dan padding memiliki fungsi berbeda. Margin adalah jarak luar elemen yang memisahkannya dari elemen lain di sekitarnya, border adalah garis yang mengelilingi elemen sebagai pembatas antara isi dan luar elemen, sedangkan padding adalah ruang di dalam border yang memisahkan konten dari garis batas elemen. Ketiganya dapat diatur dengan CSS, misalnya margin: 20px; border: 2px solid black; padding: 15px; untuk membuat jarak luar, garis tepi, dan jarak isi ke tepi.
+
+4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+Flexbox dan grid layout adalah sistem layout modern di CSS yang memudahkan pengaturan elemen dibanding metode lama seperti float. Flexbox berfokus pada tata letak satu dimensi (horizontal atau vertikal) dan sangat cocok untuk mengatur item dalam baris atau kolom dengan properti seperti display: flex;, justify-content;, dan align-items;. Sementara itu, grid layout berfokus pada tata letak dua dimensi (baris dan kolom sekaligus), sehingga ideal untuk membuat struktur halaman kompleks menggunakan properti seperti display: grid;, grid-template-columns;, dan gap;. Secara ringkas, flexbox lebih cocok untuk mengatur isi komponen, sedangkan grid lebih tepat digunakan untuk mengatur keseluruhan layout halaman.
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+- Membuat fungsi baru edit_product untuk edit product dan delete_product untuk menghapus product di views.py dan hubungkannya ke http request di urls.py.
+- Mengatur konfigurasi static di settings.py dan tambahkan folder baru bernama static di roots.
+- Membuat html baru untuk edit_product dan card_product untuk digunakan nanti.
+- Membuat folder css di static/ dan tambahkan file global.css untuk css default/global.
+- Menambahkan konfigurasi tailwind di base.html agar dapat menggunakan tailwind.
+- Menambahkan navbar.html di templates roots untuk navigation bar website dan buatkan konfigurasi untuk mobile dan desktop agar dapat reponsive.
+- Menambahkan navbar di main.html dengan include.
+- Mendesign seluruh templates di main sesuai yang diinginkan dengan menggunakan tailwind dan html.
+- Saya juga menggunakan card_product.html sebagai card untuk product-product yang ada dan hubungkan ke main.html dengan include.
+- Saya juga membuat folder baru di static bernama image untuk image yang digunakan pada aplikasi ini dan menambahkan image bernama no-product sebagai default image saat tidak ada product.
 - Lakukan "git add .", "git commit -m <komentar>", dan "git push origin <main branch>" serta "git push PWS <main branch>" setiap kali melakukan perubahan.
