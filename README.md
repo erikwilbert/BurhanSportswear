@@ -1,6 +1,6 @@
 Tautan menuju aplikasi : https://erik-wilbert-burhansportswear.pbp.cs.ui.ac.id/
 
-### Tugas 2
+# Tugas 2
 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
 - Membuat folder proyek local, aktifkan virtual environment, susun requirements.txt, download seluruh dependence atau library yang terdapat pada requirements.txt.
 - Inisialisasi git dan buat .gitignore untuk file sensitif yang tidak perlu dicommit, buatkan juga repository baru di github lalu menghubungkan git local ke github dengan menggunakan "remote add origin <link menuju repository>".
@@ -28,7 +28,7 @@ Menurut saya, framework Django dijadikan permulaan pembelajaran pengembangan per
 Asisten dosen tutorial 1 cukup membantu walaupun dilaksanakan secara online, asisten dosen membantu melalui platform yang tersedia, asisten dosen mampu membantu menangani error yang membingungkan bagi kita.
 
 
-### Tugas 3
+# Tugas 3
 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
 Data delivery diperlukan dalam pengimplementasian sebuah platform karena menjadi mekanisme utama pertukaran informasi antar komponen sistem, seperti antara frontend dan backend. Dengan adanya data delivery, aplikasi dapat menampilkan data secara dinamis, memungkinkan interaksi dua arah dengan server, serta memastikan sistem yang berbeda bisa saling berkomunikasi dengan baik. 
 
@@ -58,7 +58,7 @@ CSRF token dibutuhkan pada form Django untuk mencegah serangan Cross-Site Reques
 Selama tutorial 2 masih aman dan baik.
 
 
-### Tugas 4
+# Tugas 4
 1. Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
 Django AuthenticationForm adalah form bawaan yang disediakan oleh Django untuk menangani proses login pengguna dengan menyediakan field username dan password serta melakukan validasi langsung terhadap data yang dimasukkan berdasarkan model User. Kelebihan dari AuthenticationForm adalah sifatnya yang siap pakai tanpa perlu membuat form login dari awal, terintegrasi penuh dengan sistem autentikasi Django melalui fungsi authenticate() dan login(), memiliki validasi otomatis untuk username dan password yang salah, serta fleksibel untuk diperluas jika dibutuhkan field tambahan seperti “remember me”. AuthenticationForm memiliki kekurangan seperti hanya mendukung login berbasis username dan password sehingga tidak cukup fleksibel apabila aplikasi membutuhkan metode autentikasi lain seperti login dengan email, OTP, atau Single Sign-On (SSO), sehingga dalam penggunaannya sering memerlukan subclassing atau overriding agar sesuai dengan kebutuhan tertentu.
 
@@ -83,7 +83,7 @@ Penggunaan cookies dalam pengembangan web tidak sepenuhnya aman secara default k
 - Lakukan "git add .", "git commit -m <komentar>", dan "git push origin <main branch>" serta "git push PWS <main branch>" setiap kali melakukan perubahan.
 
 
-### Tugas 5
+# Tugas 5
 1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
 Ketika ada beberapa CSS selector yang mengatur elemen yang sama, browser akan menentukan aturan mana yang digunakan berdasarkan prinsip specificity dan cascade. Prioritasnya dimulai dari inline style (paling tinggi), lalu ID selector, kemudian class, pseudo-class, dan attribute selector, setelah itu baru element/tag selector, sedangkan universal selector, inheritance, dan default browser style berada pada prioritas terendah. Jika specificity sama, aturan yang ditulis paling akhir akan dipakai, dan jika ada !important, maka aturan tersebut akan mengalahkan semuanya kecuali ada !important lain dengan tingkat specificity yang lebih tinggi.
 
@@ -108,3 +108,20 @@ Flexbox dan grid layout adalah sistem layout modern di CSS yang memudahkan penga
 - Saya juga menggunakan card_product.html sebagai card untuk product-product yang ada dan hubungkan ke main.html dengan include.
 - Saya juga membuat folder baru di static bernama image untuk image yang digunakan pada aplikasi ini dan menambahkan image bernama no-product sebagai default image saat tidak ada product.
 - Lakukan "git add .", "git commit -m <komentar>", dan "git push origin <main branch>" serta "git push PWS <main branch>" setiap kali melakukan perubahan.
+
+
+# Tugas 6
+1. Apa perbedaan antara synchronous request dan asynchronous request? 
+Synchronous request berarti browser harus menunggu sampai server menyelesaikan proses dan mengembalikan respons sebelum pengguna dapat berinteraksi kembali dengan halaman. Sebaliknya, asynchronous request memungkinkan browser mengirim permintaan ke server di latar belakang tanpa menghentikan interaksi pengguna, sehingga bagian tertentu dari halaman dapat diperbarui secara dinamis tanpa me-reload seluruh halaman.
+
+2. Bagaimana AJAX bekerja di Django (alur request–response)? 
+Saat pengguna melakukan aksi, JavaScript mengirimkan request AJAX ke URL Django tertentu menggunakan XMLHttpRequest atau fetch(). Django kemudian memproses request tersebut di views, mengolah data dari database, lalu mengirimkan respons dalam format JSON. JavaScript di sisi klien menerima data JSON tersebut dan memperbarui tampilan halaman sesuai hasilnya tanpa perlu reload.
+
+3. Apa keuntungan menggunakan AJAX dibandingkan render biasa di Django? 
+AJAX membuat website lebih interaktif dan efisien karena hanya bagian tertentu dari halaman yang diperbarui, bukan keseluruhan. Ini mengurangi waktu loading, menghemat bandwidth, dan membuat aplikasi terasa lebih responsif. Selain itu, pengalaman pengguna menjadi lebih mulus karena interaksi seperti mengirim form, menambah data, atau memuat konten baru dapat dilakukan tanpa berpindah halaman.
+
+4. Bagaimana cara memastikan keamanan saat menggunakan AJAX untuk fitur Login dan Register di Django?
+Untuk menjaga keamanan, pastikan setiap request AJAX yang mengirim data sensitif menggunakan HTTPS agar terenkripsi. Sertakan juga CSRF token dalam request POST untuk mencegah serangan Cross-Site Request Forgery. Selain itu, validasi input pengguna di server-side harus tetap dilakukan agar data yang dikirim melalui AJAX tidak bisa dimanipulasi secara berbahaya dari sisi klien.
+
+5. Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?
+AJAX meningkatkan pengalaman pengguna dengan membuat interaksi di website terasa cepat dan real-time tanpa perlu memuat ulang seluruh halaman. Pengguna dapat melihat pembaruan data atau hasil aksi secara langsung, misalnya saat menambahkan produk ke keranjang atau memposting komentar. Hal ini menciptakan kesan aplikasi yang modern, responsif, dan lebih nyaman digunakan.
