@@ -9,6 +9,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
 
 @login_required(login_url='/login')
 def show_main(request):
@@ -59,20 +62,19 @@ def show_xml(request):
     return HttpResponse(xml_data, content_type="application/xml")
 
 def show_json(request):
-    news_list = News.objects.all()
+    product_list = Product.objects.all()
     data = [
         {
-            'id': str(news.id),
-            'title': news.title,
-            'content': news.content,
-            'category': news.category,
-            'thumbnail': news.thumbnail,
-            'news_views': news.news_views,
-            'created_at': news.created_at.isoformat() if news.created_at else None,
-            'is_featured': news.is_featured,
-            'user_id': news.user_id,
+            'id': str(product.id),
+            'name': product.name,
+            'description': product.description,
+            'category': product.category,
+            'thumbnail': product.thumbnail,
+            'views': product.views,
+            'is_featured': product.is_featured,
+            'user_id': product.user_id,
         }
-        for news in news_list
+        for product in product_list
     ]
 
     return JsonResponse(data, safe=False)
@@ -85,23 +87,22 @@ def show_xml_by_id(request, product_id):
     except Product.DoesNotExist:
         return HttpResponse(status=404)
 
-def show_json_by_id(request, news_id):
+def show_json_by_id(request, product_id):
     try:
-        news = News.objects.select_related('user').get(pk=news_id)
+        product = Product.objects.select_related('user').get(pk=product_id)
         data = {
-            'id': str(news.id),
-            'title': news.title,
-            'content': news.content,
-            'category': news.category,
-            'thumbnail': news.thumbnail,
-            'news_views': news.news_views,
-            'created_at': news.created_at.isoformat() if news.created_at else None,
-            'is_featured': news.is_featured,
-            'user_id': news.user_id,
-            'user_username': news.user.username if news.user_id else None,
+            'id': str(product.id),
+            'name': product.name,
+            'description': product.description,
+            'category': product.category,
+            'thumbnail': product.thumbnail,
+            'views': product.views,
+            'is_featured': product.is_featured,
+            'user_id': product.user_id,
+            'user_username': product.user.username if product.user_id else None,
         }
         return JsonResponse(data)
-    except News.DoesNotExist:
+    except Product.DoesNotExist:
         return JsonResponse({'detail': 'Not found'}, status=404)
     
 def register(request):
@@ -155,3 +156,25 @@ def delete_product(request, id):
     product = get_object_or_404(Product, pk=id)
     product.delete()
     return HttpResponseRedirect(reverse('main:show_main'))
+
+@csrf_exempt
+@require_POST
+def add_product_entry_ajax(request):
+    name = strip_tags(request.POST.get("name")) # strip HTML tags!
+    description = strip_tags(request.POST.get("description")) # strip HTML tags!
+    category = request.POST.get("category")
+    thumbnail = request.POST.get("thumbnail")
+    is_featured = request.POST.get("is_featured") == 'on'
+    user = request.user
+
+    new_product = Product(
+        name=name, 
+        description=description,
+        category=category,
+        thumbnail=thumbnail,
+        is_featured=is_featured,
+        user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)

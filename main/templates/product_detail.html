@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block meta %}
-<title>{{ product.title }} - Burhan Sportswear</title>
+<title>{{ product.name }} - Burhan Sportswear</title>
 {% endblock meta %}
 
 {% block content %}
@@ -16,13 +16,13 @@
             </a>
         </div>
         
-        <!-- Article -->
-        <article class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <!-- Product -->
+        <product class="bg-white rounded-lg border border-gray-200 overflow-hidden">
             
             <!-- Header -->
             <div class="p-6 sm:p-8">
                 <div class="flex flex-wrap items-center gap-2 mb-4">
-                    <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-green-600 text-white">
+                    <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-blue-600 text-white">
                         {{ product.get_category_display }}
                     </span>
                     {% if product.is_featured %}
@@ -33,7 +33,7 @@
                 </div>
                 
                 <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
-                    {{ product.title }}
+                    {{ product.name }}
                 </h1>
                 
                 <div class="flex flex-wrap items-center text-sm text-gray-500 gap-4">
@@ -45,16 +45,16 @@
             {% if product.thumbnail %}
                 <div class="px-6 sm:px-8">
                     <img src="{{ product.thumbnail }}" 
-                         alt="{{ product.title }}" 
+                         alt="{{ product.name }}" 
                          class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-lg">
                 </div>
             {% endif %}
 
-            <!-- Content -->
+            <!-- description -->
             <div class="p-6 sm:p-8">
                 <div class="prose prose-lg max-w-none">
                     <div class="text-gray-700 leading-relaxed whitespace-pre-line text-base sm:text-lg">
-                        {{ product.content }}
+                        {{ product.description }}
                     </div>
                 </div>
             </div>
@@ -74,7 +74,122 @@
                     </div>
                 </div>
             </div>
-        </article>
+        </product>
     </div>
 </div>
 {% endblock content %}
+
+<script>
+// Configuration
+const PRODUCT_ID = "{{ product.id }}";
+const PRODUCT_DETAIL_ENDPOINT = `{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', PRODUCT_ID);
+
+// DOM Elements
+const loadingState = document.getElementById('loading-state');
+const errorState = document.getElementById('error-state');
+const productDescription = document.getElementById('product-description');
+const badgesContainer = document.getElementById('badges-container');
+const productName = document.getElementById('product-name');
+const productDate = document.getElementById('product-date');
+const productViews = document.getElementById('product-views');
+const featuredImageContainer = document.getElementById('featured-image-container');
+const featuredImage = document.getElementById('featured-image');
+const productDescriptionText = document.getElementById('product-description-text');
+const productAuthor = document.getElementById('product-author');
+
+// Show/hide page sections
+function showState(state) {
+    loadingState.classList.toggle('hidden', state !== 'loading');
+    errorState.classList.toggle('hidden', state !== 'error');
+    productDescription.classList.toggle('hidden', state !== 'ready');
+}
+
+// Get readable category name
+function getCategoryLabel(categoryCode) {
+    return categoryCode;
+}
+
+// Render product description
+function renderProduct(product) {
+    // Set name
+    productName.textContent = product.name;
+    document.name = `${product.name} - Sportswear`;
+    
+    // Set badges
+    badgesContainer.innerHTML = '';
+    
+    // Category badge
+    const categoryBadge = document.createElement('span');
+    categoryBadge.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-blue-600 text-white';
+    categoryBadge.textContent = getCategoryLabel(product.category);
+    badgesContainer.appendChild(categoryBadge);
+    
+    // Featured badge
+    if (product.is_featured) {
+        const featuredBadge = document.createElement('span');
+        featuredBadge.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-100 text-yellow-800';
+        featuredBadge.textContent = 'Featured';
+        badgesContainer.appendChild(featuredBadge);
+    }
+    
+    // Hot badge
+    if (product.views > 20) {
+        const hotBadge = document.createElement('span');
+        hotBadge.className = 'inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-red-100 text-red-800';
+        hotBadge.textContent = 'Hot';
+        badgesContainer.appendChild(hotBadge);
+    }
+    
+    // Set date and views
+    const formattedDate = new Date(product.created_at).toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    productDate.textContent = formattedDate;
+    productViews.textContent = `${product.views} views`;
+    
+    // Set featured image
+    if (product.thumbnail) {
+        featuredImage.src = product.thumbnail;
+        featuredImage.alt = product.name;
+        featuredImageContainer.classList.remove('hidden');
+    } else {
+        featuredImageContainer.classList.add('hidden');
+    }
+    
+    // Set description
+    productDescriptionText.textContent = product.description;
+    
+    // Set user
+    const sellerName = product.user_username || 'Anonymous';
+    productAuthor.textContent = `User: ${sellerName}`;
+}
+
+// Fetch product detail
+async function loadProductDetail() {
+    try {
+        showState('loading');
+        
+        const response = await fetch(PRODUCT_DETAIL_ENDPOINT, {
+            headers: { 'Accept': 'application/json' },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch product detail');
+        }
+
+        const productData = await response.json();
+        renderProduct(productData);
+        showState('ready');
+    } catch (error) {
+        console.error('Error loading product detail:', error);
+        showState('error');
+    }
+}
+
+// Initialize page
+loadProductDetail();
+</script>
