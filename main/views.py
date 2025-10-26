@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
-import datetime
+from datetime import datetime
 import json
 
 
@@ -131,7 +131,7 @@ def login_user(request):
         user = form.get_user()
         login(request, user)
         response = HttpResponseRedirect(reverse("main:show_main"))
-        response.set_cookie('last_login', datetime.datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
+        response.set_cookie('last_login', datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
         return response
 
     return render(request, 'login.html', {'form': form})
