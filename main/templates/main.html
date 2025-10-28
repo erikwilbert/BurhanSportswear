@@ -95,7 +95,7 @@ function toggleSections({loading=false, error=false, empty=false, grid=false}) {
 }
 
 function buildCard(p) {
-  const productCard = document.createElement('article');
+  const productCard = document.createElement('product');
   productCard.className = 'bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-shadow overflow-hidden flex flex-col';
 
   const detailLink = `/product/${p.id}/`;
@@ -166,7 +166,5 @@ showAllButton.onclick = () => { activeFilter = 'all'; applyFilter(); };
 showMyButton.onclick = () => { activeFilter = 'my'; applyFilter(); };
 document.addEventListener('DOMContentLoaded', fetchProducts);
 </script>
-
-
 
 {% endblock content %}
