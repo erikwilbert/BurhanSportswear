@@ -156,13 +156,13 @@ def edit_product(request, id):
 
     return render(request, "edit_product.html", {'form': form})
 
-
 @login_required(login_url='/login')
 def delete_product(request, id):
-    product = get_object_or_404(Product, pk=id, user=request.user)
-    product.delete()
-    messages.success(request, 'Product deleted successfully!')
-    return redirect('main:show_main')
+    if request.method == "POST":
+        product = get_object_or_404(Product, pk=id, user=request.user)
+        product.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
 
 
 @csrf_exempt

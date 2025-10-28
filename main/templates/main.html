@@ -14,10 +14,20 @@
       <h1 class="text-3xl font-bold text-gray-900 mb-2">Burhan Sportswear</h1>
       <p class="text-gray-600">Stay updated with the latest Product.</p>
     </div>
-    <!-- Button to open modal -->
-    <button onclick="showModal()" class="inline-flex items-center px-4 py-2 bg-white text-blue-600 font-semibold outline outline-2 outline-blue-600 outline-offset-[-2px] rounded-md hover:bg-blue-600 hover:text-white transition-colors mb-4">
-      Create Product by AJAX
-    </button>
+    <div class="flex items-center gap-3 mb-4">
+      <button 
+        onclick="showModal()" 
+        class="inline-flex items-center px-4 py-2 bg-white text-blue-600 font-semibold outline outline-2 outline-blue-600 outline-offset-[-2px] rounded-md hover:bg-blue-600 hover:text-white transition-colors">
+        Create Product by AJAX
+      </button>
+    
+      <button 
+        id="refresh-button" 
+        class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 font-medium border border-gray-300 rounded-md hover:bg-gray-200 transition-colors">
+        🔄 Refresh
+      </button>
+    </div>
+
 
     <!-- Filter Section -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-white rounded-lg border border-gray-200 p-4">
@@ -117,10 +127,22 @@ function buildCard(p) {
       <p class="text-gray-600 text-sm mb-3 line-clamp-3">${p.description}</p>
       <div class="mt-auto flex justify-between items-center border-t pt-3">
         ${Number(CURRENT_USER_ID) === Number(p.user_id)
-          ? `<div class="flex space-x-2">
-              <a href="${editLink}" class="text-gray-600 tzext-sm hover:text-gray-800">Edit</a>
-              <a href="${deleteLink}" class="text-red-600 tzext-sm hover:text-red-800" onclick="return confirm('Delete this product?')">Delete</a>
-             </div>`
+          ? `<div class="flex items-center space-x-3 mt-2">
+              <button 
+                type="button" 
+                onclick=""openEditModal(${p.id})" 
+                class="text-gray-600 text-sm hover:text-gray-800 transition">
+                Edit
+              </button>
+              <span class="text-gray-400">|</span>
+              <button 
+                type="button" 
+                onclick="openDeleteModal(${p.id})" 
+                class="text-red-600 text-sm hover:text-red-800 transition">
+                Delete
+              </button>
+            </div>
+            `
           : ''}
       </div>
     </div>
@@ -161,6 +183,32 @@ async function fetchProducts() {
     toggleSections({error: true});
   }
 }
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+const refreshButton = document.getElementById('refresh-button');
+
+refreshButton.addEventListener('click', async () => {
+  refreshButton.disabled = true;
+  refreshButton.textContent = '⏳ Refreshing...';
+  await fetchProducts();
+  refreshButton.textContent = '🔄 Refresh';
+  refreshButton.disabled = false;
+});
 
 showAllButton.onclick = () => { activeFilter = 'all'; applyFilter(); };
 showMyButton.onclick = () => { activeFilter = 'my'; applyFilter(); };

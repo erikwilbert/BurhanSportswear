@@ -1,0 +1,64 @@
+<div id="edit-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300">
+  <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md transform scale-90 opacity-0 transition-all duration-300">
+    <h2 class="text-xl font-semibold mb-4">Edit Product</h2>
+    <form id="edit-form">
+      <input type="hidden" id="edit-product-id">
+      
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Name</label>
+        <input id="edit-product-name" class="w-full border rounded-lg p-2" />
+      </div>
+
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Price</label>
+        <input id="edit-product-price" type="number" class="w-full border rounded-lg p-2" />
+      </div>
+
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Category</label>
+        <input id="edit-product-category" class="w-full border rounded-lg p-2" />
+      </div>
+
+      <div class="mb-3">
+        <label class="block text-sm font-medium">Description</label>
+        <textarea id="edit-product-description" class="w-full border rounded-lg p-2"></textarea>
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="closeEditModal()" class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">Cancel</button>
+        <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openEditModal(id) {
+    console.log("Opening edit modal for:", id);
+    fetch(`/json/${id}/`)
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to fetch product");
+            return response.json();
+        })
+        .then(product => {
+            console.log("Product data:", product);
+            
+            document.getElementById('edit-product-id').value = product.id;
+            document.getElementById('edit-product-name').value = product.name;
+            document.getElementById('edit-product-price').value = product.price;
+            document.getElementById('edit-product-description').value = product.description;
+            document.getElementById('edit-product-category').value = product.category;
+
+            const modal = document.getElementById('edit-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.add('opacity-100', 'scale-100'), 10);
+        })
+        .catch(error => console.error("Error:", error));
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('edit-modal');
+    modal.classList.remove('opacity-100', 'scale-100');
+    setTimeout(() => modal.classList.add('hidden'), 200);
+}
+</script>

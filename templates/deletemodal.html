@@ -1,0 +1,68 @@
+
+<div id="deleteModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-80 transform transition-all scale-95 opacity-0"
+       id="deleteModalContent">
+    <h3 class="text-lg font-semibold mb-4 text-gray-800 text-center">Delete Product</h3>
+    <p class="text-gray-600 text-center mb-6">Are you sure you want to delete this product?</p>
+    <div class="flex justify-center gap-3">
+      <button id="confirmDeleteBtn" 
+              class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition">
+        Yes
+      </button>
+      <button onclick="closeDeleteModal()" 
+              class="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400 transition">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentDeleteId = null;
+
+function openDeleteModal(id) {
+  currentDeleteId = id;
+  const modal = document.getElementById("deleteModal");
+  const modalContent = document.getElementById("deleteModalContent");
+
+  modal.classList.remove("hidden");
+
+  requestAnimationFrame(() => {
+    modalContent.classList.remove("scale-95", "opacity-0");
+    modalContent.classList.add("scale-100", "opacity-100");
+  });
+}
+
+function closeDeleteModal() {
+  const modal = document.getElementById("deleteModal");
+  const modalContent = document.getElementById("deleteModalContent");
+
+  modalContent.classList.add("scale-95", "opacity-0");
+  modalContent.classList.remove("scale-100", "opacity-100");
+
+  setTimeout(() => modal.classList.add("hidden"), 150);
+}
+
+document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+  if (!currentDeleteId) return;
+  deleteProduct(currentDeleteId);
+  closeDeleteModal();
+});
+
+function deleteProduct(id) {
+  fetch(`/product/${id}/delete`, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': csrftoken,
+    },
+  })
+  .then(response => {
+    if (response.ok) {
+      showToast("success", "Product deleted successfully!");
+      setTimeout(() => location.reload(), 1000);
+    } else {
+      showToast("error", "Failed to delete product!");
+    }
+  });
+}
+</script>
