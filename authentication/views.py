@@ -9,29 +9,35 @@ from django.http import JsonResponse
 # Create your views here.
 @csrf_exempt
 def login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            auth_login(request, user)
-            # Login status successful.
-            return JsonResponse({
-                "username": user.username,
-                "status": True,
-                "message": "Login successful!"
-            }, status=200)
-        else:
-            return JsonResponse({
-                "status": False,
-                "message": "Login failed, account is disabled."
-            }, status=401)
-
-    else:
+    if request.method != "POST":
         return JsonResponse({
             "status": False,
-            "message": "Login failed, please check your username or password."
-        }, status=401)
+            "message": "Only POST method is allowed."
+        }, status=405)
+
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+
+    if not username or not password:
+        return JsonResponse({
+            "status": False,
+            "message": "Username and password are required."
+        }, status=400)
+
+    user = authenticate(username=username, password=password)
+    if user is not None and user.is_active:
+        auth_login(request, user)
+        return JsonResponse({
+            "username": user.username,
+            "status": True,
+            "message": "Login successful!"
+        }, status=200)
+
+    return JsonResponse({
+        "status": False,
+        "message": "Invalid username or password."
+    }, status=401)
+
     
 @csrf_exempt
 def register(request):
